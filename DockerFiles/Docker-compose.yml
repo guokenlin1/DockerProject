@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+    app:
+        image: guokenlin/python-app:version1
+        working_dir: /app
+        volumes:
+            - ./:/app
+        ports:
+            - 5000:5000
+        environment: 
+            FLASK_ENV: development
+        labels: 
+            traefik.http.routers.nginx.rule: Path(`/`)
+            
+    proxy:
+        image: traefik:v2.1
+        command: --api.insecure-true --providers.docker
+        ports:
+            - 80:80
+            - 8080:8080
+        volumes:
+            - /var/run/docker.dock:/var/run/docker.sock

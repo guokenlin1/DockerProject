@@ -1,0 +1,141 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Blabber",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/blabs/{id}": {
+        "delete": {
+          "summary": "Remove a blab",
+          "description": "Remove a blab",
+          "operationId": "addBlab",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the blab to delete.",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Blab deleted successfully"
+            },
+            "404": {
+              "description": "Blab not found"
+            }
+          }
+        }
+      },
+      "/blabs": {
+        "get": {
+          "summary": "Get blabs",
+          "description": "Get all blabs",
+          "operationId": "doGet",
+          "parameters": [
+            {
+              "name": "createdSince",
+              "in": "query",
+              "description": "Get blabs created since specified timestamp (seconds)",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Valid response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/BlabModel"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Add a new blab",
+          "description": "Add a new blab",
+          "operationId": "addBlab_1",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddRequestModel"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Blab created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BlabModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AuthorModel": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "BlabModel": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "postTime": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "author": {
+              "$ref": "#/components/schemas/AuthorModel"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "AddRequestModel": {
+          "type": "object",
+          "properties": {
+            "author": {
+              "$ref": "#/components/schemas/AuthorModel"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
